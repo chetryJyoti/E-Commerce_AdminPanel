@@ -1,7 +1,7 @@
 import Nav from "@/components/Nav";
 import { useSession, signIn, signOut } from "next-auth/react";
-
-export default function Layout({children}) {
+import Image from "next/image";
+export default function Layout({ children }) {
   const { data: session } = useSession();
   console.log("session:", session);
   if (!session) {
@@ -12,7 +12,16 @@ export default function Layout({children}) {
             onClick={() => signIn("google")}
             className="bg-white p-3 rounded-lg"
           >
-            Login with google
+            <div className="flex">
+              <Image
+                src="assets/google-icon.svg"
+                alt="My Image"
+                width={20}
+                height={20}
+                className="mr-2"
+              />
+              Login with google
+            </div>
           </button>
         </div>
       </div>
@@ -24,7 +33,6 @@ export default function Layout({children}) {
       <div className="bg-white flex-grow my-2 mr-2 rounded-lg p-4">
        {children}
       </div>
-      {/* <img className="rounded-lg" src={session.user.image}></img> */}
     </div>
   );
 }

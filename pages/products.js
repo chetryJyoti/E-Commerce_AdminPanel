@@ -1,9 +1,16 @@
-import Layout from '@/components/Layout'
-
+import Layout from "@/components/Layout";
+import Link from "next/link";
 const products = () => {
   return (
-    <Layout>PRODUCTS</Layout>
-  )
-}
+    <Layout>
+      <Link
+        className="btn-primary"
+        href={"/products/new"}
+      >
+        Add new product
+      </Link>
+    </Layout>
+  );
+};
 
-export default products
+export default products;
