@@ -1,4 +1,4 @@
-### Ecommerce Dashboard
+# Ecommerce Dashboard
 This is an ecommerce dashboard built with Next.js, React, Tailwind CSS, and MongoDB. It includes sections for managing products, categories, and settings.
 
 ## Features
