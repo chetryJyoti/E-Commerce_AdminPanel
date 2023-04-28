@@ -3,7 +3,7 @@ import { useSession, signIn, signOut } from "next-auth/react";
 import Image from "next/image";
 export default function Layout({ children }) {
   const { data: session } = useSession();
-  console.log("session:", session);
+  // console.log("session:", session);
   if (!session) {
     return (
       <div className="bg-blue-900 w-screen flex items-center h-screen">

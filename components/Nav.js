@@ -6,7 +6,7 @@ const Nav = () => {
   const activeLink = inactiveLink +' bg-white text-blue-900 rounded-l-lg py-1';
   const router = useRouter();
   const {pathname}=router;
-  console.log({router});
+  // console.log({router});
   return (
     <aside className="p-4 pr-0 text-white">
       <Link href={'/'} className="flex gap-1 mb-2 mr-4">
