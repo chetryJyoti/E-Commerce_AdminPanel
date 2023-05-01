@@ -8,6 +8,9 @@ export default function Layout({ children }) {
     return (
       <div className="bg-blue-900 w-screen flex items-center h-screen">
         <div className="text-center w-full">
+          <div >
+            <h1 className="text-white ">Hello Admin,</h1>
+          </div>
           <button
             onClick={() => signIn("google")}
             className="bg-white p-3 rounded-lg"
