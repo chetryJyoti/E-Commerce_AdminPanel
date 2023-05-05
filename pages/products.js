@@ -2,7 +2,7 @@ import Layout from "@/components/Layout";
 import Link from "next/link";
 import axios from "axios";
 import { useState, useEffect } from "react";
-import ClipLoader from "react-spinners/ClipLoader";
+import Loader from "@/components/Loader";
 const products = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [products, setProducts] = useState([]);
@@ -76,12 +76,7 @@ const products = () => {
             ))}
         </tbody>
       </table>
-      {isLoading && (
-        <div className=" mt-8 flex flex-col justify-center items-center ">
-          <h1>Loading products</h1>
-          <ClipLoader size={50} color={"#123abc"} />
-        </div>
-      )}
+      {isLoading && <Loader loadingWhat="Loading Products" />}
     </Layout>
   );
 };

@@ -2,14 +2,14 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 
 const Nav = () => {
-  const inactiveLink = 'flex gap-1';
-  const activeLink = inactiveLink +' bg-white text-blue-900 rounded-l-lg py-1';
+  const inactiveLink = "flex gap-1";
+  const activeLink = inactiveLink + " bg-white text-blue-900 rounded-l-lg py-1";
   const router = useRouter();
-  const {pathname}=router;
+  const { pathname } = router;
   // console.log({router});
   return (
     <aside className="p-4 pr-0 text-white">
-      <Link href={'/'} className="flex gap-1 mb-2 mr-4">
+      <Link href={"/"} className="flex gap-1 mb-2 mr-4">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -27,7 +27,10 @@ const Nav = () => {
         <span>EcommerceAdmin</span>
       </Link>
       <nav className="flex flex-col gap-2">
-        <Link href={"/"} className={router.pathname=="/"?activeLink:inactiveLink}>
+        <Link
+          href={"/"}
+          className={router.pathname == "/" ? activeLink : inactiveLink}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -44,7 +47,10 @@ const Nav = () => {
           </svg>
           Dashboard
         </Link>
-        <Link href={"/products"} className={pathname.includes('/products')?activeLink:inactiveLink}>
+        <Link
+          href={"/products"}
+          className={pathname.includes("/products") ? activeLink : inactiveLink}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -61,7 +67,12 @@ const Nav = () => {
           </svg>
           Products
         </Link>
-        <Link href={"/categories"} className={pathname.includes('/categories')?activeLink:inactiveLink}>
+        <Link
+          href={"/categories"}
+          className={
+            pathname.includes("/categories") ? activeLink : inactiveLink
+          }
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -73,12 +84,15 @@ const Nav = () => {
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
-              d="M8.25 21v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21m0 0h4.5V3.545M12.75 21h7.5V10.75M2.25 21h1.5m18 0h-18M2.25 9l4.5-1.636M18.75 3l-1.5.545m0 6.205l3 1m1.5.5l-1.5-.5M6.75 7.364V3h-3v18m3-13.636l10.5-3.819"
+              d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zM3.75 12h.007v.008H3.75V12zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm-.375 5.25h.007v.008H3.75v-.008zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"
             />
           </svg>
           Categories
         </Link>
-        <Link href={"/orders"} className={pathname.includes('/orders')?activeLink:inactiveLink}>
+        <Link
+          href={"/orders"}
+          className={pathname.includes("/orders") ? activeLink : inactiveLink}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -96,7 +110,10 @@ const Nav = () => {
           Orders
         </Link>
 
-        <Link href={"/settings"} className={pathname.includes('/settings')?activeLink:inactiveLink}>
+        <Link
+          href={"/settings"}
+          className={pathname.includes("/settings") ? activeLink : inactiveLink}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
