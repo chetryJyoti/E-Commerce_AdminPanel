@@ -38,6 +38,9 @@ const categories = () => {
         ></input>
         <select className="mb-0">
           <option value="0">No parent category</option>
+          {categories.length>0 && categories.map(category=>(
+            <option key={category._id} value={category._id}>{category.name}</option>
+          ))}
         </select>
         <button type="submit" className="btn-primary">
           Save
