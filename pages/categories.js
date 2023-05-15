@@ -2,11 +2,14 @@ import Layout from "@/components/Layout";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Loader from "@/components/Loader";
-const categories = () => {
+import { withSwal } from "react-sweetalert2";
+
+const Categories = ({ swal }) => {
   const [name, setName] = useState("");
   const [categories, setCategories] = useState([]);
   const [parentCategory, setParentCategory] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const [editedCategory, setEditedCategory] = useState(null);
 
   async function getCategories() {
     await axios.get("/api/categories").then((result) => {
@@ -18,16 +21,60 @@ const categories = () => {
     getCategories();
   }, []);
   console.log("parentCategory:", parentCategory);
+
   const saveCategory = async (ev) => {
     ev.preventDefault();
-    await axios.post("/api/categories", { name, parentCategory });
+    const data = { name, parentCategory };
+    if (editedCategory) {
+      data._id = editedCategory._id;
+      await axios.put("/api/categories", data);
+      setEditedCategory(null);
+    } else {
+      await axios.post("/api/categories", data);
+    }
     setName("");
+    setParentCategory("");
     getCategories();
   };
+
+  function editCategory(category) {
+    setEditedCategory(category);
+    setName(category.name);
+    setParentCategory(category.parent?._id);
+  }
+  function deleteCategory(category) {
+    swal
+      .fire({
+        title: "Are you sure?",
+        text: `Do you really one to delete "${category.name}"`,
+        showCancelButton: true,
+        reverseButtons: true,
+        cancelButtonTitle: "Cancel",
+        confirmButtonText: "Yes, Delete!",
+        confirmButtonColor: "#f54e42",
+      })
+      .then(async (result) => {
+        // when confirmed and promise resolved...
+        console.log({ result });
+        if (result.isConfirmed) {
+          const { _id } = category;
+          await axios.delete("/api/categories?_id=" + _id);
+          getCategories();
+        }
+      })
+      .catch((error) => {
+        // when promise rejected...
+        console.log("unable to delete");
+      });
+  }
   return (
     <Layout>
       <h1>Categories</h1>
-      <label>New Category</label>
+      <label>
+        {editedCategory
+          ? `Editing category "${editedCategory?.name}"`
+          : "New Category"}{" "}
+      </label>
       <form onSubmit={saveCategory} className="flex gap-1 mb-6">
         <input
           className="mb-0"
@@ -62,8 +109,7 @@ const categories = () => {
             <td></td>
           </tr>
         </thead>
-        <tbody>
-          {isLoading && <Loader loadingWhat="Loading Categories" />}
+        <tbody>   
           {!isLoading &&
             categories.length > 0 &&
             categories.map((category) => (
@@ -71,15 +117,26 @@ const categories = () => {
                 <td>{category.name} </td>
                 <td>{category.parent?.name}</td>
                 <td className="flex gap-2">
-                  <button className="btn-primary">Edit</button>
-                  <button className="btn-primary">Delete</button>
+                  <button
+                    className="btn-primary"
+                    onClick={() => editCategory(category)}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    className="btn-primary"
+                    onClick={() => deleteCategory(category)}
+                  >
+                    Delete
+                  </button>
                 </td>
               </tr>
             ))}
         </tbody>
       </table>
+      {isLoading && <Loader loadingWhat="Loading Categories" />}
     </Layout>
   );
 };
 
-export default categories;
+export default withSwal(({ swal }, ref) => <Categories swal={swal} />);
