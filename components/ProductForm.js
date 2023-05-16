@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import ClipLoader from "react-spinners/ClipLoader";
 import { ReactSortable } from "react-sortablejs";
 const ProductForm = ({
@@ -9,6 +9,7 @@ const ProductForm = ({
   description: currentDesc,
   price: currentPrice,
   images: currentImages,
+  category:assignedCategory
 }) => {
   const [title, setTitle] = useState(currentTitle || "");
   const [description, setDescription] = useState(currentDesc || "");
@@ -16,13 +17,22 @@ const ProductForm = ({
   const [images, setImages] = useState(currentImages || []);
   const [goToProducts, setGoToProducts] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const [categories, setCategories] = useState([]);
+  const [category, setCategory] = useState( assignedCategory ||'')
   const router = useRouter();
 
   // console.log("product_id:", _id);
 
+  useEffect(() => {
+    axios.get("/api/categories").then((result) => {
+      setCategories(result.data);
+    });
+  }, []);
+  console.log({categories});
+
   const saveProduct = async (ev) => {
     ev.preventDefault();
-    const data = { title, description, price, images };
+    const data = { title, description, price, images,category };
     //update
     if (_id) {
       await axios.put("/api/products", { ...data, _id });
@@ -51,10 +61,10 @@ const ProductForm = ({
     setIsUploading(false);
   }
 
- function updateImagesOrder(images){
-  // console.log(images);
-  setImages(images);
- }
+  function updateImagesOrder(images) {
+    // console.log(images);
+    setImages(images);
+  }
 
   if (goToProducts) {
     router.push("/products");
@@ -69,6 +79,15 @@ const ProductForm = ({
         value={title}
         onChange={(e) => setTitle(e.target.value)}
       ></input>
+      <label>Categroy</label>
+      <select value={category}
+      onChange={ev=>setCategory(ev.target.value)}
+      >
+        <option value="">Uncategorized</option>
+        {categories.length>0 && categories.map(c=>
+          <option key={c._id} value={c._id}>{c.name}</option>
+        )}
+      </select>
       <label>Description</label>
       <textarea
         type="text"
@@ -78,7 +97,11 @@ const ProductForm = ({
       ></textarea>
       <label>Upload Photos:</label>
       <div className="my-2 flex flex-wrap gap-2 ">
-        <ReactSortable className="flex flex-wrap gap-2 cursor-pointer " list={images} setList={updateImagesOrder}>
+        <ReactSortable
+          className="flex flex-wrap gap-2 cursor-pointer "
+          list={images}
+          setList={updateImagesOrder}
+        >
           {!!images?.length &&
             images.map((link) => (
               <div key={link} className="h-24 ">
