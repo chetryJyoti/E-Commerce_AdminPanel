@@ -25,7 +25,14 @@ const Categories = ({ swal }) => {
 
   const saveCategory = async (ev) => {
     ev.preventDefault();
-    const data = { name, parentCategory };
+    const data = {
+      name,
+      parentCategory,
+      properties: properties.map((p) => ({
+        name: p.name,
+        values: p.values.split(","),
+      })),
+    };
     if (editedCategory) {
       data._id = editedCategory._id;
       await axios.put("/api/categories", data);
@@ -35,6 +42,7 @@ const Categories = ({ swal }) => {
     }
     setName("");
     setParentCategory("");
+    setProperties([]);
     getCategories();
   };
 
@@ -42,6 +50,12 @@ const Categories = ({ swal }) => {
     setEditedCategory(category);
     setName(category.name);
     setParentCategory(category.parent?._id);
+    setProperties(
+      category.properties.map(({ name, values }) => ({
+        name,
+        values: values.join(","),
+      }))
+    );
   }
   function deleteCategory(category) {
     swal
@@ -174,7 +188,12 @@ const Categories = ({ swal }) => {
             <button
               type="button"
               className="btn-primary"
-              onClick={() => setEditedCategory(null)}
+              onClick={() => {
+                setEditedCategory(null);
+                setName("");
+                setParentCategory("");
+                setProperties([]);
+              }}
             >
               Cancel
             </button>
