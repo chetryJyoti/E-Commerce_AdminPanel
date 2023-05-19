@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useRouter } from "next/router";
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import ClipLoader from "react-spinners/ClipLoader";
 import { ReactSortable } from "react-sortablejs";
 const ProductForm = ({
@@ -9,7 +9,8 @@ const ProductForm = ({
   description: currentDesc,
   price: currentPrice,
   images: currentImages,
-  category:assignedCategory
+  category: assignedCategory,
+  properties: assignedProperties,
 }) => {
   const [title, setTitle] = useState(currentTitle || "");
   const [description, setDescription] = useState(currentDesc || "");
@@ -18,7 +19,10 @@ const ProductForm = ({
   const [goToProducts, setGoToProducts] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [categories, setCategories] = useState([]);
-  const [category, setCategory] = useState( assignedCategory ||'')
+  const [category, setCategory] = useState(assignedCategory || "");
+  const [productProperties, setProductProperties] = useState(
+    assignedProperties || {}
+  );
   const router = useRouter();
 
   // console.log("product_id:", _id);
@@ -28,11 +32,18 @@ const ProductForm = ({
       setCategories(result.data);
     });
   }, []);
-  console.log({categories});
+  console.log({ categories });
 
   const saveProduct = async (ev) => {
     ev.preventDefault();
-    const data = { title, description, price, images,category };
+    const data = {
+      title,
+      description,
+      price,
+      images,
+      category,
+      properties: productProperties,
+    };
     //update
     if (_id) {
       await axios.put("/api/products", { ...data, _id });
@@ -66,8 +77,30 @@ const ProductForm = ({
     setImages(images);
   }
 
+  function setProductProp(propName, value) {
+    setProductProperties((prev) => {
+      const newProductProps = { ...prev };
+      newProductProps[propName] = value;
+      return newProductProps;
+    });
+  }
+
   if (goToProducts) {
     router.push("/products");
+  }
+
+  const propertiesToFill = [];
+
+  if (categories.length > 0 && category) {
+    let catInFo = categories.find(({ _id }) => _id === category);
+    propertiesToFill.push(...catInFo.properties);
+    while (catInFo?.parent?._id) {
+      const parentCat = categories.find(
+        ({ _id }) => _id === catInFo?.parent?._id
+      );
+      propertiesToFill.push(...parentCat.properties);
+      catInFo = parentCat;
+    }
   }
 
   return (
@@ -80,14 +113,33 @@ const ProductForm = ({
         onChange={(e) => setTitle(e.target.value)}
       ></input>
       <label>Categroy</label>
-      <select value={category}
-      onChange={ev=>setCategory(ev.target.value)}
-      >
+      <select value={category} onChange={(ev) => setCategory(ev.target.value)}>
         <option value="">Uncategorized</option>
-        {categories.length>0 && categories.map(c=>
-          <option key={c._id} value={c._id}>{c.name}</option>
-        )}
+        {categories.length > 0 &&
+          categories.map((c) => (
+            <option key={c._id} value={c._id}>
+              {c.name}
+            </option>
+          ))}
       </select>
+      <label>Properties</label>
+      {propertiesToFill.length == 0 && <p>No properties</p>}
+      {propertiesToFill.length > 0 &&
+        propertiesToFill.map((p) => (
+          <div className="flex gap-1">
+            <div key={p.name}>{p.name}</div>
+            <select
+              value={productProperties[p.name]}
+              onChange={(ev) => setProductProp(p.name, ev.target.value)}
+            >
+              {p.values.map((v) => (
+                <option value={v}>{v}</option>
+              ))}
+            </select>
+          </div>
+        ))}
+      <div className="mt-1"></div>
+
       <label>Description</label>
       <textarea
         type="text"
