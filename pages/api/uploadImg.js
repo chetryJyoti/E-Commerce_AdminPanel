@@ -2,12 +2,16 @@ import multiparty from "multiparty";
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import fs from "fs";
 import mime from "mime-types";
+import { mongooseConnection } from "@/lib/mongoose";
+import { isAdminRequest } from "./auth/[...nextauth]";
 
 // Set the name of the S3 bucket to upload files to
 const bucketName = "admin-ecommerce-nextjs";
 
 // Define the request handler function
 export default async function handle(req, res) {
+  await mongooseConnection();
+  await isAdminRequest(req, res);
   // Create a new instance of the multiparty form object to parse the incoming request
   const form = new multiparty.Form();
 
@@ -48,7 +52,7 @@ export default async function handle(req, res) {
       new PutObjectCommand({
         Bucket: bucketName,
         Key: newFileName,
-        Body:fs.readFileSync(file.path),
+        Body: fs.readFileSync(file.path),
         ACL: "public-read",
         ContentType: mime.lookup(file.path),
       })

@@ -1,11 +1,13 @@
 import { mongooseConnection } from "@/lib/mongoose";
 import { Product } from "@/models/Product";
+import { isAdminRequest } from "./auth/[...nextauth]";
 
 // api/products
 export default async function handle(req, res) {
   // res.json(req.method)
   const { method } = req;
   await mongooseConnection();
+  await isAdminRequest(req, res);
   if (method === "GET") {
     //get product by id
     if (req.query?.id) {
@@ -25,7 +27,7 @@ export default async function handle(req, res) {
       description,
       price,
       images,
-      category,
+      category: category || undefined,
       properties,
     });
     res.json(newProduct);
@@ -35,7 +37,14 @@ export default async function handle(req, res) {
       req.body;
     await Product.updateOne(
       { _id },
-      { title, description, price, images, category, properties }
+      {
+        title,
+        description,
+        price,
+        images,
+        category: category || undefined,
+        properties,
+      }
     );
     res.json(true);
   }
