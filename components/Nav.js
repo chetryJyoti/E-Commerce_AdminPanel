@@ -4,7 +4,9 @@ import { useRouter } from "next/router";
 
 const Nav = () => {
   const inactiveLink = "flex gap-1";
-  const activeLink = inactiveLink + " bg-white text-blue-900 rounded-l-lg py-1";
+  const activeLink = inactiveLink + " bg-highlight text-black rounded-md py-1 ";
+  const inactiveIcon = "w-6 h-6 ";
+  const activeIcon = inactiveIcon + " text-primary";
   const router = useRouter();
   const { pathname } = router;
   // console.log({router});
@@ -13,7 +15,7 @@ const Nav = () => {
     await signOut();
   }
   return (
-    <aside className="p-4 pr-0 text-white">
+    <aside className="p-4 text-gray-500">
       <Link href={"/"} className="flex gap-1 mb-2 mr-4">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -42,7 +44,7 @@ const Nav = () => {
             viewBox="0 0 24 24"
             strokeWidth={1.5}
             stroke="currentColor"
-            className="w-6 h-6"
+            className={router.pathname == "/" ? activeIcon : inactiveIcon}
           >
             <path
               strokeLinecap="round"
@@ -62,7 +64,7 @@ const Nav = () => {
             viewBox="0 0 24 24"
             strokeWidth={1.5}
             stroke="currentColor"
-            className="w-6 h-6"
+            className={pathname.includes("/products") ? activeIcon : inactiveIcon}
           >
             <path
               strokeLinecap="round"
@@ -84,7 +86,9 @@ const Nav = () => {
             viewBox="0 0 24 24"
             strokeWidth={1.5}
             stroke="currentColor"
-            className="w-6 h-6"
+            className={
+              pathname.includes("/categories") ? activeIcon : inactiveIcon
+            }
           >
             <path
               strokeLinecap="round"
@@ -104,7 +108,7 @@ const Nav = () => {
             viewBox="0 0 24 24"
             strokeWidth={1.5}
             stroke="currentColor"
-            className="w-6 h-6"
+            className={pathname.includes("/orders") ? activeIcon : inactiveIcon}
           >
             <path
               strokeLinecap="round"
@@ -125,7 +129,7 @@ const Nav = () => {
             viewBox="0 0 24 24"
             strokeWidth={1.5}
             stroke="currentColor"
-            className="w-6 h-6"
+            className={pathname.includes("/settings") ? activeIcon : inactiveIcon}
           >
             <path
               strokeLinecap="round"

@@ -6,7 +6,7 @@ export default function Layout({ children }) {
   // console.log("session:", session);
   if (!session) {
     return (
-      <div className="bg-blue-900 w-screen flex items-center h-screen">
+      <div className="bg-bgGray w-screen flex items-center h-screen">
         <div className="text-center w-full">
           <div >
             <h1 className="text-white ">Hello Admin,</h1>
@@ -31,7 +31,7 @@ export default function Layout({ children }) {
     );
   }
   return (
-    <div className="bg-blue-900 min-h-screen flex">
+    <div className="bg-bgGray min-h-screen flex">
       <Nav />
       <div className="bg-white flex-grow my-2 mr-2 rounded-lg p-4">
        {children}
