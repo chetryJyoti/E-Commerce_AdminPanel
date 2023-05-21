@@ -12,26 +12,28 @@ export default function Layout({ children }) {
   // console.log("session:", session);
   if (!session) {
     return (
-      <div className="bg-bgGray w-screen flex items-center h-screen">
-        <div className="text-center w-full">
-          <div>
-            <h1 className="text-white ">Hello Admin,</h1>
+      <div>
+        <div className="bg-bgGray w-screen flex flex-col items-center h-screen justify-center">
+          <div className="mb-4">
+            <Logo />
           </div>
-          <button
-            onClick={() => signIn("google")}
-            className="bg-white p-3 rounded-lg"
-          >
-            <div className="flex">
-              <Image
-                src="assets/google-icon.svg"
-                alt="My Image"
-                width={20}
-                height={20}
-                className="mr-2"
-              />
-              Login with google
-            </div>
-          </button>
+          <div className="text-center w-full">
+            <button
+              onClick={() => signIn("google")}
+              className="bg-gray-200 p-3 rounded-lg"
+            >
+              <div className="flex">
+                <Image
+                  src="assets/google-icon.svg"
+                  alt="My Image"
+                  width={20}
+                  height={20}
+                  className="mr-2"
+                />
+                Login with google
+              </div>
+            </button>
+          </div>
         </div>
       </div>
     );
@@ -54,8 +56,7 @@ export default function Layout({ children }) {
           </svg>
         </button>
         <div className="flex grow justify-center">
-
-        <Logo/>
+          <Logo />
         </div>
       </div>
       <div className=" flex">
